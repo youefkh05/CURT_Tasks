@@ -1,0 +1,40 @@
+#include <Stepper.h>
+
+const int stepsPerRevolution = 300;  // change this to fit the number of steps per revolution
+// for your motor
+
+                                         
+// initialize the stepper library for both steppers:
+Stepper small_stepper(stepsPerRevolution, 1,2); 
+void setup() {
+  Serial.begin(9600);
+  pinMode(PULS, OUTPUT);
+  pinMode(DIR, OUTPUT);
+  pinMode(A0, INPUT);
+small_stepper.setSpeed(300);    // set first stepper speed
+}
+void loop() {
+  int sensorReading = analogRead(A2); // read value from joystick X-axis
+
+  if (sensorReading < 490) { small_stepper.step(1); }   // step left
+  if (sensorReading > 540) { small_stepper.step(-1); }  // step right
+  uint16_t SensorReading = analogRead(A0); //analog for nema 23..............
+  if(SensorReading == 0)
+  {
+    digitalWrite(DIR, HIGH);
+    digitalWrite(PULS, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(PULS, LOW);
+    delayMicroseconds(1000);
+  }
+  
+  else if(SensorReading == 1023)
+  {
+    digitalWrite(DIR, LOW);
+    digitalWrite(PULS, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(PULS, LOW);
+    delayMicroseconds(1000);
+  }
+}
+

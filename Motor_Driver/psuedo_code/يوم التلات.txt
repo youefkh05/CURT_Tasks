@@ -1,0 +1,81 @@
+#include <Stepper.h>
+
+const int stepsPerRevolution = 300;  // change this to fit the number of steps per revolution
+// for your motor
+
+                                         
+// initialize the stepper library for both steppers:
+Stepper small_stepper(stepsPerRevolution, 1,2);  
+Stepper small_stepper2(stepsPerRevolution, 3,4); 
+
+const int PULS = 9; 
+const int DIR = 10; 
+const int PULS2 = 11;
+const int DIR2 = 12; 
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(PULS, OUTPUT);
+  pinMode(DIR, OUTPUT);
+  pinMode(A0, INPUT);
+  pinMode(PULS2, OUTPUT);
+  pinMode(DIR2, OUTPUT);
+  pinMode(A1, INPUT);
+   small_stepper.setSpeed(300);    // set first stepper speed
+  small_stepper2.setSpeed(300);   // set second stepper speed
+}
+
+
+void loop() {
+  int sensorReading = analogRead(A2); // read value from joystick X-axis
+
+  if (sensorReading < 490) { small_stepper.step(1); }   // step left
+  if (sensorReading > 540) { small_stepper.step(-1); }  // step right
+ 
+ int sensorReading2 = analogRead(A3); // read value from joystick Y-axis
+
+  if (sensorReading2 < 490) { small_stepper2.step(1); } // step forward
+  if (sensorReading2 > 540) { small_stepper2.step(-1); } // step backward
+  
+
+  uint16_t SensorReading = analogRead(A0); //analog for nema 23..............
+  uint16_t SensorReading2 = analogRead(A1); //analog for nema 23....................
+  Serial.print(SensorReading);
+  Serial.print(SensorReading2);
+  
+  if(SensorReading == 0)
+  {
+    digitalWrite(DIR, HIGH);
+    digitalWrite(PULS, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(PULS, LOW);
+    delayMicroseconds(1000);
+  }
+  
+  else if(SensorReading == 1023)
+  {
+    digitalWrite(DIR, LOW);
+    digitalWrite(PULS, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(PULS, LOW);
+    delayMicroseconds(1000);
+  }
+  if(SensorReading2 == 0)
+  {
+    digitalWrite(DIR2, HIGH);
+    digitalWrite(PULS2, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(PULS2, LOW);
+    delayMicroseconds(1000);
+  }
+  
+  else if(SensorReading2 == 1023)
+  {
+    digitalWrite(DIR2, LOW);
+    digitalWrite(PULS2, HIGH);
+    delayMicroseconds(1000);
+    digitalWrite(PULS2, LOW);
+    delayMicroseconds(1000);
+  }
+
+}
